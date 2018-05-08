@@ -1,0 +1,142 @@
+doctype html
+html
+    head
+        title ChatServer
+        link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+        script(src="/socket.io/socket.io.js")
+        link(rel="stylesheet",href="/stylesheet/style.css")
+        
+        style
+          .images{width:100px;height:100px}
+          .divimage{padding-left:3px}
+        script.
+
+             $(document).on('click','img',function(){
+               var imgid = $(this).attr('id');
+               var imagelink = '/image/'+imgid+'.jpg';
+               $('#bd').css('background-image', 'url('+imagelink+')')
+             })
+             var welcomebool = true
+             $(document).on('click','.welcome',function(){
+
+               if(welcomebool)
+                {
+                  $(this).css('color','white');
+                  welcomebool = false;
+                }
+              else
+                {
+                  $(this).css('color','black');
+                  welcomebool = true;
+                }
+             })
+
+             var socket = io.connect("http://chatserver.ml:8000"+"/chatserver");
+             socket.on("connect",function(){
+               socket.emit('newuserconnected',{userid:'#{user.id}',full_name:'#{user.full_name}',pic:'#{user.profilepic}'});
+               console.log("connected");
+             }); 
+
+             
+
+             $(document).on('keyup','.message',function(e){
+               
+                if(e.which === 13 && $(this).val()!="")
+                    {
+                       socket.emit('newmessage',{ name:'#{user.full_name}',message:$(this).val(), image:'#{user.profilepic}'});
+
+                       $(".message").val("");
+                    }
+                    
+             });     
+
+             socket.on('broadcast',function(data){
+                var procdata = JSON.parse(data);
+                $('.chatdata').html('')
+                for(var i in procdata)
+                 {
+                    str = "";
+                    if(procdata[i].name != '#{user.full_name}')
+                        {
+                            str += '<li style="background:white">';
+                            str += '<div style="padding-left:0px;padding-top:0px;" class="col-md-7 col-sm-7">';
+                            str += '<div style="padding-left:10px;" class="col-md-2"><img src="' +procdata[i].image + '" style="height:40px;width:40px" class="img-rounded"></div>';
+                            str += '<div style="padding-left:3px;" class="col-md-10 thumbnail">';
+                            str += '<p style="font-family:arial;font-size:14px">' + procdata[i].message +'</p>';
+                            str += '</div> </div> </li>';
+                        }
+                    else
+                        {
+                           str += '<li style="background:white">';
+                           str += '<div style="float:right;padding-right:10px;padding-top:0px;" class="col-md-7 col-sm-7">';
+                           str += '<div style="padding-left:5px;" class="col-md-10 thumbnail">';
+                           str +=  '<p style="font-family:arial;font-size:14px;text-transform:capitalize">' + procdata[i].message + '</p>';
+                           str +=  '</div>';
+                           str +=  '<div style="padding-right:0px;" class="col-md-2"><img src="'+ procdata[i].image + '" style="height:40px;width:40px;margin-right:0px" class="img-rounded"><br clear="all"></div>';
+                           str += '</div> </li>';
+                        }
+                    $(str).hide().appendTo($('.chatdata')).slideDown(100);    
+             }
+             })
+
+             socket.on('onlineuser',function (data) {
+                 var procdata = JSON.parse(data);
+                 $('.online').html('');
+                 for (var i in procdata)
+                 {
+                    str = "<li><img style='height:30px;width:30px' src='"+ procdata[i].id.pic +"'> &nbsp;&nbsp;&nbsp;" + procdata[i].id.name + "</li><br>";
+                    $(str).appendTo($('.online'));
+                 }
+             })
+             setInterval(function () {
+                 socket.emit("updatelist")
+             },15 * 1000);
+
+
+            
+        
+    body
+    	#bd(background='/image/163.jpg',style='')
+	        .container-fluid
+	            .row
+	                .col-md-12.col-sm-12
+	                    h1.welcome(style='text-align:center;')
+	                      b Welcome to chat Server
+	                    h5(style='text-align:center;') Run on Port 8000
+	                .col-md-12.col-sm-12
+	                    h4(style='text-align:center;') #{user.full_name}
+	                .col-md-12.col-sm-12(style='padding-left:10px;')
+	                    .col-md-3.col-sm-12(style='padding-left:10px;')
+	                      .col-md-5.col-sm-12(style='padding-left:10px;overflow: scroll;height:470px;')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#163(src='/image/163.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#178(src='/image/178.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#180(src='/image/180.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#196(src='/image/196.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#197(src='/image/197.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#203(src='/image/203.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#212(src='/image/212.jpg')
+	                        .col-md-12.col-sm-1.thumbnail.divimage
+	                          img.images#215(src='/image/215.jpg')        
+
+
+	                    .col-md-6.col-sm-8.thumbnail.trans(style='height:400px;overflow: auto;display: flex;flex-direction: column-reverse;padding-left:0px;background: rgba(204, 204, 204, 0.1)')
+	                        ul.chatdata(type='none' style='padding-left:4px;')
+	                            
+	                    .col-md-3.col-sm-4.thumbnail
+	                      .col-md-12.col-sm.12(style='text-align:center;font-size:20px')
+	                        p
+	                          b Online Users
+	                      ul.online(type='none')
+	                       
+	                    .col-md-6.col-sm-12(style='padding:10px;margin-top:-20px')
+	                        .form-group
+	                            input.form-control.message(type='text',placeholder='Enter New Message', style='padding:30px;')

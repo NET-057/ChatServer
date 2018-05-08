@@ -1,0 +1,15 @@
+::-webkit-scrollbar {
+display: none;
+}
+
+.images{width:100px;height:100px}
+.divimage{padding-left:3px;}
+.imagediv{height:470px;}
+
+
+@media (max-width:1280px){
+.imagediv{height:100px}
+
+}
+
+

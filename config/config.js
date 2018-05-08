@@ -1,0 +1,1 @@
+ module.exports = require("./" + (process.env.Node_ENV || "development") + ".json");

@@ -1,0 +1,15 @@
+{
+	"dburl":"mongodb://dileep:meena@ds123129.mlab.com:23129/chat",
+	"sessionsecret":"dileepmeena",
+	"fb":{
+		"appId":"460339410979937",
+		"appsecret":"179459b26c5031d19073c506e50cb729",
+		"callback":"http://localhost:8000/auth/facebook/callback"
+	},
+	"google":{
+		"appId":"15852077096-koq26klrnnj2da18se7im6rat1u2tr8d.apps.googleusercontent.com",
+		"appsecret":"8OUib-O4CzqMbcUZ7l1Tx9IG",
+		"callback":"http://localhost:8000/auth/google/callback"
+	},
+	"host":"http://localhost:8000"
+}

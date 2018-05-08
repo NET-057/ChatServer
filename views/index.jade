@@ -1,0 +1,41 @@
+doctype html
+html
+    head
+        title='Welcome to chat server'
+        link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")
+        
+        script.
+           $(document).on('click','.form-control',function(){
+             $(this).css('background-color', 'red');
+           })    
+
+    body
+        .container-fluid(style='padding-top:100px')
+            .col-md-4.col-sm-8.col-md-offset-4
+                h1
+                  b #{heading}
+                form(action='/',method='post')
+                    .form-group
+                        label Email Address
+                        input.form-control(type='text',name='username')
+                    .form-group
+                        label Enter Password
+                        input.form-control(type='password',name='pass')
+                    .col-md-12.col-sm-12(style='padding-left:0px')
+                        .form-group(style='')
+                            button.btn.btn-primary(type='submit') Submit
+
+                .col-md-12.col-sm-12(style='padding-left:0px;padding-right:0px')
+                    .col-md-4.col-sm-12(style='padding-left:0px;padding-right:0px')
+                        p
+                           a#verifyButton.btn.btn-primary(href='/auth/facebook') Facebook
+
+                    //- .col-md-4.col-sm-12(style='padding-left:0px;padding-right:0px;text-align:center')
+                    //-     p
+                    //-        a#verifyButton.btn.btn-danger(href='/auth/google',style='padding-left:23px;padding-right:23px') Gmail
+
+                    //- .col-md-4.col-sm-12(style='padding-left:0px;padding-right:0px;text-align:right')
+                    //-     p
+                    //-        a#verifyButton.btn.btn-info(href='/auth/twitter',style='padding-left:23px;padding-right:23px') Twitter
